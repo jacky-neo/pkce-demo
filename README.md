@@ -160,7 +160,10 @@ Oauth2认证和资源配置
       }
     </pre>
     
-    <br>
+  </li>
+
+  <li>
+      <br>
     遇到的一些坑：<br>
     曾配过CorsConfig类和SecurityConfiguration类的corsConfigurationSource()方法，都没效果，
     特别是从client调用token时都不行。经过摸索，最终发现用filter方式是可行的。另外一种方式用
@@ -168,9 +171,8 @@ Oauth2认证和资源配置
     <br>
     filter分两部分，第一部分是跨域设置和对Header等控制，第二部分是当请求是options时，则返回200。
     这是配合axios获取token用的。
-
   </li>
-
+  
 </ul>
 </p>
 
