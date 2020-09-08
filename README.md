@@ -29,8 +29,10 @@
   java -jar target/ui-0.0.1-SNAPSHOT.jar <br>
   
 * 执行
-  authentication服务器端口是30000, 客户端端口是30010. 在chrome浏览器输入<a style="text-decoration:none">http://127.0.0.1:30010</a>, 即进入客户端。如下图所示：
-<p><img src="./doc/images/p1.png"/></p>
+  authentication服务器端口是30000, 客户端端口是30010. 在chrome浏览器输入<font style="text-decoration:none">http://127.0.0.1:30010</font>, 即进入客户端。如下图所示：
+<p>
+  ![image](https://github.com/jacky-neo/pkce-demo/blob/master/doc/images/p1.png)
+</p>
 
   <br>
   "非认证点击" 按钮演示未获token访问接口的效果，上面会有出错提示。<br>
@@ -72,7 +74,7 @@
 
   下图是成功的显示
   <p>
-    <img src="./doc/images/p2.png"/>
+    ![image](https://github.com/jacky-neo/pkce-demo/blob/master/doc/images/p2.png)
     <br>
     如图所示，标红的地方表明了获取code, token和调用接口的network过程
   </p>
@@ -180,7 +182,7 @@ Oauth2认证和资源配置
    * pkce.js用来生成code_vefivier和code_challenge<br>
    * 获取token,通过Qs实现options的简单调用<br>
    * "认证点击"按钮的调用流程如下图，主要用到了js的异步回调技术：<br><br>
-   <img src="./doc/images/p3.png"/>
+  ![image](https://github.com/jacky-neo/pkce-demo/blob/master/doc/images/p3.png)
 </p>
 
 
