@@ -22,12 +22,13 @@
   java -jar target/authentication-0.0.1-SNAPSHOT.jar
   <br><br>
   运行客户端<br>
-  cd authentication <br>
-  mvn -DskipTests clean package
-  java -jar target/authentication-0.0.1-SNAPSHOT.jar
+  cd html <br>
+  mvn -DskipTests clean package <br>
+  java -jar target/ui-0.0.1-SNAPSHOT.jar <br>
   
-  
-*运行：<br>
+* 执行
+  authentication服务器端口是30000, 客户端端口是30010. 在chrome浏览器输入http://127.0.0.1:30010,即进入客户端
+
  
 
 接着讲解下实现过程：
