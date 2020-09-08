@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: ui
+  jackson:
+    default-property-inclusion: non-null
+  thymeleaf:
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML
+  mvc:
+    static-path-pattern: /static/**
+      
+
+server:
+  port: 30010
+  tomcat:
+    uri-encoding: UTF-8
+
+logging:
+  level:
+    root: ERROR
+    com.ghy.vo: INFO
+  file: ${spring.application.name}.log

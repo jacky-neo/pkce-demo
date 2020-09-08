@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: authentication
+  jackson:
+     serialization:
+       fail-on-empty-beans: false
+     default-property-inclusion: non-null
+     deserialization:
+       fail-on-unknown-properties: false
+
+server:
+  port: 30000
+
+
+logging:
+  level:
+    root: FATAL
+    com.ghy.vo: INFO
+  file: ${spring.application.name}.log

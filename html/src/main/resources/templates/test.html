@@ -1,0 +1,170 @@
+<html>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.min.js"></script>
+        <script src="/static/js/vue.min.js"></script>
+        <script src="/static/js/axios.min.js"></script>
+        <script src="/static/js/qs.min.js"></script>
+        <script src="/static/js/pkce.js"></script>
+    </head>
+
+    <body>
+
+        <div id="space">
+            <div>{{ result }} </div>
+            <button @click="nonAuth()">非认证点击</button>
+            <button @click="auth()">认证点击</button>
+        </div>
+
+        <script>
+
+        var codeVerifier = '';
+        var codeChallenge = '';    
+
+        var vm = new Vue({
+            el: '#space',
+            data() {
+                return{
+                    result:'nothing...',
+                    invokeUrl: 'http://127.0.0.1:30000/res/showData',
+                    authorityUrl: 'http://127.0.0.1:30000/oauth/authorize',
+                    tokenUrl: 'http://127.0.0.1:30000/oauth/token',
+                    client_id: 'vo_client_id',
+                    redirect_uri: 'http://127.0.0.1:30010',
+                    response_type: 'code',
+                    scope: 'read',
+                    grant_type: 'authorization_code',
+                    code_challenge:'',
+                    code_verifier:'',
+                    code_challenge_method:'s256',
+                    code: null,
+                    accessToken: null,
+                }
+            },
+            methods:{
+                nonAuth(){
+                    vm.result = '';
+                    axios.get(
+                        this.invokeUrl
+                    ).then((res) => {
+                        //console.log('---+++'+JSON.stringify(res));
+                        vm.result = res.data;
+                    }).catch((err)=>{
+                        vm.result = 'there is error';
+                        console.log(err);
+                    });
+                },
+                //查询
+                auth(){
+                    codeVerifier = generateCodeVerifier();
+                    //console.log('1===>codeVerifier:'+codeVerifier);
+                    localStorage.setItem("codeVerifier", codeVerifier);
+                    getCode();
+                },
+            },
+            mounted:()=>{
+                let code = getQueryString('code');
+                if(code != null){
+                    let p = new Promise(function (resolve, reject) {
+                        //console.log('---code is'+code);
+                        resolve(code);
+                    });
+                    p.then(getToken)
+                     .then(biz)
+                     .then((res)=>{
+                         //console.log('=============='+JSON.stringify(res));
+                         vm.result =  res;
+                     });
+
+                }
+            },
+        });
+
+
+
+        function getQueryString(name) {
+            let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+            let r = window.location.search.substr(1).match(reg);
+            if (r != null) {
+                return decodeURIComponent(r[2]);
+            };
+            return null;
+        }
+
+        function getCode() {
+            return new Promise((resolve, reject) => {
+                vm.result = 'in getCode...';
+                codeChallenge = generateCodeChallenge(codeVerifier);
+                //console.log('==='+codeChallenge);
+                let url = vm.authorityUrl+'?response_type='+vm.response_type
+                    +'&client_id='+vm.client_id
+                    +'&redirect_uri='+vm.redirect_uri
+                    +'&scope='+vm.scope
+                    +'&code_challenge='+codeChallenge
+                    +'&code_challenge_method='+vm.code_challenge_method;
+                //console.log(url);
+                window.location.href = url;
+
+            });
+        }
+
+        function getToken(code) {
+            return new Promise((resolve, reject) => {
+                codeVerifier = localStorage.getItem("codeVerifier");
+                //console.log('codeVerifier is '+codeVerifier);
+                //console.log('tokeUrl is '+vm.tokenUrl);
+                vm.result = 'in getToken...';
+                let data = Qs.stringify({
+                        'client_id': vm.client_id,
+                        'grant_type': vm.grant_type,
+                        'redirect_uri': vm.redirect_uri,
+                        'code': code,
+                        'code_verifier': codeVerifier
+                    });
+                //console.log('--------------'+data);
+                axios.post(
+                    vm.tokenUrl,
+                    data
+                ).then((res) => {
+                    //console.log(res.data);
+                    vm.result = res.data;
+                    let tokenValue = res.data.access_token;
+                    return resolve(tokenValue);
+                }).catch((err)=>{
+                    console.log(err);
+                    return reject(err);
+                });
+
+            })
+        }
+
+
+
+        function biz(accessToken){
+            return new Promise((resolve, reject) => {
+                axios.get(
+                    vm.invokeUrl,
+                    {
+                         headers: {
+                             'Authorization': `Bearer ${accessToken}`,
+                         }
+                    }
+                ).then((res) => {
+                    //console.log('------------->>'+JSON.stringify(res.data));
+                    return resolve(res.data);
+                }).catch((err)=>{
+                    //console.log('===err',JSON.stringify(err));
+                    return reject(err);
+                });
+
+
+            });
+
+        }
+
+        </script>
+
+
+
+    </body>
+
+</html>
