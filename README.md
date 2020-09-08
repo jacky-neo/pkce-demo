@@ -27,7 +27,10 @@
   java -jar target/ui-0.0.1-SNAPSHOT.jar <br>
   
 * 执行
-  authentication服务器端口是30000, 客户端端口是30010. 在chrome浏览器输入http://127.0.0.1:30010,即进入客户端
+  authentication服务器端口是30000, 客户端端口是30010. 在chrome浏览器输入http://127.0.0.1:30010,即进入客户端。如下图所示：
+
+
+  
 
  
 
